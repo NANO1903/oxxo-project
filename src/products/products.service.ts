@@ -13,28 +13,6 @@ export class ProductsService {
     private productRepository: Repository<Product>
   ) {}
 
-  private products: CreateProductDto[] = [{
-    productId: uuid(),
-    productName: 'Sabritas Normal 60g',
-    price: 29,
-    countSeal: 3,
-    provider: uuid()
-  },
-  {
-    productId: uuid(),
-    productName: 'Coca-Cola 600ml',
-    price: 40,
-    countSeal: 2,
-    provider: uuid()
-  },
-  {
-    productId: uuid(),
-    productName: 'Agua Ciel 1L',
-    price: 15,
-    countSeal: 0,
-    provider: uuid()
-  }];
-
   create(createProductDto: CreateProductDto) {
     const product = this.productRepository.save(createProductDto);
     return product;
@@ -54,12 +32,13 @@ export class ProductsService {
   
   findByProvider(providerId: string) {
     //This action returns all products by provider
-
+    /*
     const productsByProvider = this.products.filter((product) => product.provider === providerId);
 
     if(productsByProvider.length === 0) throw new NotFoundException();
 
     return productsByProvider;
+    */
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -72,23 +51,7 @@ export class ProductsService {
     
     this.productRepository.save(productToUpdate);
 
-    return productToUpdate;    
-    
-    /*
-    let productToUpdate = this.findOne(id); //Buscar el producto a actualizar
-    productToUpdate = {  //Actualizar el producto
-      ... productToUpdate, //Copiar los datos del producto encontrado
-      ... updateProductDto //Sobreescribir con los datos del DTO
-    }
-
-    this.products = this.products.map((product) => { //Actualizar el array de productos
-      if (product.productId === id) {   //Coindicidencia de ID
-        product = productToUpdate;  //Actualizar el producto
-      }
-      return product;
-    });
-
-    return productToUpdate;*/
+    return productToUpdate;
   }
 
   remove(id: string) {
