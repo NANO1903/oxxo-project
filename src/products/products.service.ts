@@ -31,6 +31,8 @@ export class ProductsService {
   }
   
   findByProvider(providerId: string) {
+    return "OK";
+
     //This action returns all products by provider
     /*
     const productsByProvider = this.products.filter((product) => product.provider === providerId);
