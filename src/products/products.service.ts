@@ -30,17 +30,12 @@ export class ProductsService {
     return product; 
   }
   
-  findByProvider(providerId: string) {
-    return "OK";
-
-    //This action returns all products by provider
-    /*
-    const productsByProvider = this.products.filter((product) => product.provider === providerId);
-
-    if(productsByProvider.length === 0) throw new NotFoundException();
-
-    return productsByProvider;
-    */
+  findByProvider(id: string) {
+    return this.productRepository.findBy( {
+      provider: {
+        providerId: id,
+      } 
+    } );
   }
 
   async update(id: string, updateProductDto: UpdateProductDto) {
@@ -59,7 +54,6 @@ export class ProductsService {
   remove(id: string) {
     this.findOne(id);
     this.productRepository.delete( {productId: id} );
-    //return this.productRepository.find();
     return { message: `Product with id ${id} deleted` };
   }
 }
