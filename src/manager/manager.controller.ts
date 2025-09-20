@@ -19,16 +19,16 @@ export class ManagerController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.managerService.findOne(+id);
+    return this.managerService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateManagerDto: UpdateManagerDto) {
-    return this.managerService.update(+id, updateManagerDto);
+    return this.managerService.update(id, updateManagerDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.managerService.remove(+id);
+    return this.managerService.remove(id);
   }
 }
