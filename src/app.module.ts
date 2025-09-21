@@ -9,6 +9,7 @@ import { ProvidersModule } from './providers/providers.module';
 import { ManagerModule } from './manager/manager.module';
 import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [EmployeesModule, ProductsModule, TypeOrmModule.forRoot({
@@ -21,7 +22,7 @@ import { RegionsModule } from './regions/regions.module';
     entities: [],
     autoLoadEntities: true,
     synchronize: true,
-  }), ProvidersModule, ManagerModule, LocationsModule, RegionsModule],
+  }), ProvidersModule, ManagerModule, LocationsModule, RegionsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
