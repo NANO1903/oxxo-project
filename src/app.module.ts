@@ -10,19 +10,29 @@ import { ManagerModule } from './manager/manager.module';
 import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JWT_KEY, EXPIRES_IN } from './auth/constants/jwt.constants';
 
 @Module({
-  imports: [EmployeesModule, ProductsModule, TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: process.env.host,
-    port: process.env.port ? parseInt(process.env.port) : 5432,
-    username: 'postgres',
-    password: "NANO_fba$1903",
-    database: process.env.name,
-    entities: [],
-    autoLoadEntities: true,
-    synchronize: true,
-  }), ProvidersModule, ManagerModule, LocationsModule, RegionsModule, AuthModule],
+  imports: [
+    EmployeesModule, ProductsModule, 
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.host,
+      port: process.env.port ? parseInt(process.env.port) : 5432,
+      username: 'postgres',
+      password: "NANO_fba$1903",
+      database: process.env.name,
+      entities: [],
+      autoLoadEntities: true,
+      synchronize: true,
+    }), 
+    ProvidersModule, 
+    ManagerModule, 
+    LocationsModule, 
+    RegionsModule, 
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
