@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/User.entity';
+import { User } from './entities/user.entity';
 import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -33,8 +33,9 @@ export class AuthService {
     const match = await bcrypt.compare(loginUserDto.userPassword, user.userPassword);
     if(!match) throw new UnauthorizedException("No estás autorizado para esta operación");
     const payload = {
-      user: user.userEmail,
-      password: user.userPassword,
+      userEmail: user.userEmail,
+      userPassword: user.userPassword,
+      userRoles: user.userRoles,
     }
     const token = this.jwtService.sign(payload);
     return token;
