@@ -1,2 +1,2 @@
 export const JWT_KEY = "FSDFOPI%&@W23489023ADASD?=!##";
-export const EXPIRES_IN = "120s";
+export const EXPIRES_IN = "3600s";

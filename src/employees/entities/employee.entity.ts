@@ -13,7 +13,7 @@ export class Employee {
     @Column({ type: "text"})
     employeePhoneNumber: string;
     @Column({ type: "text", unique: true})
-    email: string;
+    employeeEmail: string;
     @Column({ type: "text", nullable: true})
     employeePhoto: string;
 
