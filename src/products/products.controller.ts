@@ -2,12 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Valid
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { v4 as uuid } from 'uuid';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ROLES } from 'src/auth/constants/roles.constants';
 import { ApiAuth } from 'src/auth/decorators/api.decorator';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiAuth()
+@ApiBearerAuth()
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

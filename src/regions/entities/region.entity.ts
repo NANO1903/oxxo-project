@@ -5,11 +5,13 @@ import { Location } from '../../locations/entities/location.entity';
 export class Region {
     @PrimaryGeneratedColumn("increment")
     regionId: number;
+    
     @Column({
         type: "text",
         unique: true,
     })
     regionName: string;
+    
     @Column("simple-array")
     regionStates: string[];
 

@@ -7,7 +7,7 @@ export class Manager {
     @PrimaryGeneratedColumn("uuid")
     managerId: string;
     @Column("text")
-    managerNFullame: string
+    managerFullName: string
     @Column("float")
     managerSalary: number;
     @Column({
