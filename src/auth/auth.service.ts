@@ -28,7 +28,7 @@ export class AuthService {
       }
     });
 
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new UnauthorizedException('You are not authorized to perform this operation');
 
     const match = await bcrypt.compare(loginUserDto.userPassword, user.userPassword);
     if(!match) throw new UnauthorizedException("No estás autorizado para esta operación");
