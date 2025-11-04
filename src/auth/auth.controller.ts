@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -6,13 +6,15 @@ import { ApiAuth } from 'src/auth/decorators/api.decorator';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { TOKEN_NAME } from './constants/jwt.constants';
+import { Cookies } from './decorators/cookies.decorator';
 
 @ApiAuth()
 @ApiBearerAuth()
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @ApiResponse({
     status: 201,
@@ -26,7 +28,7 @@ export class AuthController {
   signup(@Body() createUserDto: CreateUserDto) {
     return this.authService.registerUser(createUserDto);
   }
-  
+
   @ApiResponse({
     status: 201,
     example: {
@@ -35,10 +37,17 @@ export class AuthController {
     } as LoginUserDto
   })
   @Post('login')
-  login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.loginUser(loginUserDto);
+  async login(@Body() loginUserDto: LoginUserDto, @Res({ passthrough: true }) response, @Cookies() cookies: any) {
+    const token = await this.authService.loginUser(loginUserDto);
+    response.cookie(TOKEN_NAME, token, {
+      httpOnly: false,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
+    return;
   }
-  
+
   @ApiResponse({
     status: 201,
     example: {
