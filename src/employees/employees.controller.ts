@@ -47,7 +47,6 @@ export class EmployeesController {
   }
 
   @Auth(ROLES.MANAGER, ROLES.ADMIN)
-  @ApiParam({ name: 'uuid', required: true, description: 'Employee UUID', type: String })
   @ApiResponse({
     status: 200,
     example:
@@ -114,7 +113,7 @@ export class EmployeesController {
     ] as Location[]
   })
   @Get('location/:id')
-  findAllLocations(@Param('id') id: string) {
+  findAllLocations(@Param('id') id: string) {   
     return this.employeesService.findByLocation(+id);
   }
   

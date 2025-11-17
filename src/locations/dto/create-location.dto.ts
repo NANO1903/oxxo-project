@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, ArrayNotEmpty, IsString, MaxLength, IsOptional, IsObject } from 'class-validator';
+import { IsArray, ArrayNotEmpty, IsString, MaxLength, IsOptional, IsObject, IsUUID } from 'class-validator';
 import { Region } from 'src/regions/entities/region.entity';
 
 export class CreateLocationDto {
@@ -22,5 +22,9 @@ export class CreateLocationDto {
     @IsObject()
     @IsOptional()
     region: Region;
+    
+    @ApiPropertyOptional({ type: String, description: "Manager UUID" })
+    @IsUUID()
+    @IsOptional()
+    manager: string;
 }
-

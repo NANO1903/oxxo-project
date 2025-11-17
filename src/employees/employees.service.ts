@@ -33,7 +33,6 @@ export class EmployeesService {
   }
 
   findByLocation(id: number) {
-    console.log(id);
     return this.employeeRepository.findBy({
       location: {
         locationId: id

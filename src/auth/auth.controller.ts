@@ -39,13 +39,16 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUserDto: LoginUserDto, @Res({ passthrough: true }) response, @Cookies() cookies: any) {
     const token = await this.authService.loginUser(loginUserDto);
+    let expireDate = new Date();
+    expireDate.setDate(expireDate.getDay() + 7);
     response.cookie(TOKEN_NAME, token, {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'none',
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+      expires: expireDate,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
-    return;
+    return token;
   }
 
   @ApiResponse({

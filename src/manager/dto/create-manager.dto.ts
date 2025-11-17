@@ -5,7 +5,7 @@ export class CreateManagerDto {
     @ApiProperty({ type: String, description: "Manager name", required: true, format: "text", maxLength: 80 })
     @IsString()
     @MaxLength(80)
-    managerNFullame: string;
+    managerFullName: string;
     
     @ApiProperty({ type: Number, description: "Manager salary", required: true, format: "number", minimum: 0 })
     @IsNumber()

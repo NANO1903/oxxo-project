@@ -28,5 +28,5 @@ export class Manager {
     @JoinColumn({
         name: "userId"
     })
-    usre: User;
+    user?: User;
 }
