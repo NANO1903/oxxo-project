@@ -47,13 +47,13 @@ export class LocationsService {
     if (!locationToUpdate) throw new NotFoundException();
     const savedLocation = await this.locationRepository.save(locationToUpdate);
 
-    const updated = await this.managerRepository
+    const updatedManager = await this.managerRepository
       .preload({
         managerId: updateLocationDto.manager,
         location: locationToUpdate,
       });
-    if (!updated) throw new NotFoundException();
-    this.managerRepository.save(updated);
+    if (!updatedManager) throw new NotFoundException();
+    this.managerRepository.save(updatedManager);
 
     return savedLocation;
   }
