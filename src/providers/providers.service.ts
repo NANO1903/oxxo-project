@@ -17,7 +17,11 @@ export class ProvidersService {
   }
 
   findAll() {
-    return this.providerRepository.find();
+    return this.providerRepository.find({
+      relations: {
+        products: true,
+      }
+    });
   }
 
   findByName(providerName: string) {
@@ -29,7 +33,7 @@ export class ProvidersService {
   findOne(id: string) {
     return this.providerRepository.findOneBy( {providerId: id} );
   }
-
+  
   async update(id: string, updateProviderDto: UpdateProviderDto) {
     const providerToUpdate = await this.providerRepository.preload( {
       providerId: id,

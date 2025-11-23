@@ -5,12 +5,12 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 export class Provider {
     @PrimaryGeneratedColumn('uuid')
     providerId: string;
-    @Column( 'text' )
+    @Column('text')
     providerName: string;
-    @Column( {type: 'text', unique: true} )
+    @Column({ type: 'text', unique: true })
     providerEmail: string;
-    @Column( {type: 'text', nullable: true, } )
+    @Column({ type: 'text', nullable: true, })
     providerPhoneNumber: string;
-    @OneToMany( () => Product, (product) => product.provider )
+    @OneToMany(() => Product, (product) => product.provider)
     products: Product[];
 }
