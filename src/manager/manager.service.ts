@@ -10,19 +10,30 @@ export class ManagerService {
   constructor(
     @InjectRepository(Manager)
     private managerRepository: Repository<Manager>
-  ) {}
+  ) { }
 
   create(createManagerDto: CreateManagerDto) {
     return this.managerRepository.save(createManagerDto);
   }
 
   findAll() {
-    return this.managerRepository.find();
+    return this.managerRepository.find({
+      relations: {
+        location: true
+      }
+    });
   }
 
   findOne(id: string) {
-    const manager = this.managerRepository.findOneBy({ managerId: id });
-    if(!manager) throw new NotFoundException();
+    const manager = this.managerRepository.findOne({
+      where: {
+        managerId: id
+      },
+      relations: {
+        location: true
+      }
+    });
+    if (!manager) throw new NotFoundException();
     return manager;
   }
 
@@ -36,6 +47,6 @@ export class ManagerService {
   }
 
   remove(id: string) {
-    return this.managerRepository.delete( {managerId: id} );
+    return this.managerRepository.delete({ managerId: id });
   }
 }
