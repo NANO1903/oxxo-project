@@ -21,7 +21,11 @@ export class EmployeesService {
   }
 
   findAll() {
-    return this.employeeRepository.find();
+    return this.employeeRepository.find({
+      relations: {
+        location: true,
+      }
+    });
   }
 
   findOne(id: string) {
