@@ -8,9 +8,9 @@ import { Provider } from './entities/provider.entity';
 @Injectable()
 export class ProvidersService {
   constructor(
-    @InjectRepository(Provider) 
+    @InjectRepository(Provider)
     private providerRepository: Repository<Provider>
-  ) {}
+  ) { }
 
   create(createProviderDto: CreateProviderDto) {
     return this.providerRepository.save(createProviderDto);
@@ -25,29 +25,36 @@ export class ProvidersService {
   }
 
   findByName(providerName: string) {
-    return this.providerRepository.findOneBy( {
+    return this.providerRepository.findOneBy({
       providerName: Like(`%${providerName}%`)
-    } );
+    });
   }
 
   findOne(id: string) {
-    return this.providerRepository.findOneBy( {providerId: id} );
+    return this.providerRepository.findOne({
+      where: {
+        providerId: id
+      },
+      relations: {
+        products: true
+      }
+    });
   }
-  
+
   async update(id: string, updateProviderDto: UpdateProviderDto) {
-    const providerToUpdate = await this.providerRepository.preload( {
+    const providerToUpdate = await this.providerRepository.preload({
       providerId: id,
       ...updateProviderDto
-    } );
+    });
 
     if (!providerToUpdate) throw new NotFoundException();
-        
+
     return this.providerRepository.save(providerToUpdate);
   }
 
   remove(id: string) {
     this.findOne(id);
-    this.providerRepository.delete( {providerId: id} );
+    this.providerRepository.delete({ providerId: id });
     return { message: `Provider with id ${id} deleted` };
   }
 }

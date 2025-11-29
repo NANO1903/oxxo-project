@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { v4 as uuid } from 'uuid';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
@@ -19,11 +18,22 @@ export class ProductsService {
   }
 
   findAll() {
-    return this.productRepository.find();
+    return this.productRepository.find({
+      relations: {
+        provider: true,
+      }
+    });
   }
 
   findOne(id: string) {
-    const product = this.productRepository.findOneBy( {productId: id} );
+    const product = this.productRepository.findOne({
+      where: {
+        productId: id,
+      },
+      relations: {
+        provider: true,
+      }
+    });
     
     if(!product) throw new NotFoundException();
     

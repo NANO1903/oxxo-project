@@ -23,6 +23,6 @@ export class CreateProductDto{
     countSeal: number;
     
     @ApiProperty({ type: Provider, description: "Provider of this product", required: true})
-    @IsObject()
-    provider: Provider;
+    @IsString()
+    provider: Provider | string;
 }
