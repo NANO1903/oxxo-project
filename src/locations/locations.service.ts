@@ -20,11 +20,22 @@ export class LocationsService {
   }
 
   findAll() {
-    return this.locationRepository.find();
+    return this.locationRepository.find({
+      relations: {
+        employees: true,
+      }
+    });
   }
 
   findOne(id: number) {
-    const location = this.locationRepository.findOneBy({ locationId: id });
+    const location = this.locationRepository.findOne({
+      where: {
+        locationId: id
+      },
+      relations: {
+        employees: true,
+      }
+    });
     if (!location) throw new NotFoundException();
     return location;
   }

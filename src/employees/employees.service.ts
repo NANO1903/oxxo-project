@@ -10,11 +10,9 @@ export class EmployeesService {
   constructor(
     @InjectRepository(Employee)
     private employeeRepository: Repository<Employee>
-  ) {}
-  
-  create(createEmployeeDto: CreateEmployeeDto) {
-    console.log(createEmployeeDto);
+  ) { }
 
+  create(createEmployeeDto: CreateEmployeeDto) {
     const employee = this.employeeRepository.save(createEmployeeDto);
 
     return employee;
@@ -29,9 +27,16 @@ export class EmployeesService {
   }
 
   findOne(id: string) {
-    const employee = this.employeeRepository.findOneBy( {employeeId: id} );
-    
-    if(!employee) throw new NotFoundException();
+    const employee = this.employeeRepository.findOne({
+      where: {
+        employeeId: id
+      },
+      relations: {
+        location: true,
+      }
+    });
+
+    if (!employee) throw new NotFoundException();
 
     return employee;
   }
@@ -42,7 +47,7 @@ export class EmployeesService {
         locationId: id
       }
     });
-  } 
+  }
 
   async update(id: string, updateEmployeeDto: UpdateEmployeeDto) {
     const employeeToUpdate = await this.employeeRepository.preload({
@@ -50,7 +55,7 @@ export class EmployeesService {
       ...updateEmployeeDto
     });
 
-    if(!employeeToUpdate) throw new NotFoundException();
+    if (!employeeToUpdate) throw new NotFoundException();
 
     this.employeeRepository.save(employeeToUpdate);
 
@@ -59,7 +64,7 @@ export class EmployeesService {
 
   remove(id: string) {
     this.findOne(id);
-    this.employeeRepository.delete( {employeeId: id} );
-    return { message: `Employee with id ${id} deleted`};
+    this.employeeRepository.delete({ employeeId: id });
+    return { message: `Employee with id ${id} deleted` };
   }
 }

@@ -33,7 +33,13 @@ export class EmployeesController {
     } as Employee
   })
   @Post()
-  create(@Body() createEmployeeDto: CreateEmployeeDto) {
+  @UseInterceptors(FileInterceptor('employeePhoto'))
+  async create(@Body() createEmployeeDto: CreateEmployeeDto, @UploadedFile() file: Express.Multer.File) {
+    if (file) {
+      const response = await this.awsService.uploadFile(file);
+      createEmployeeDto.employeePhoto = response as string;
+    }
+
     return this.employeesService.create(createEmployeeDto);
   }
 
@@ -120,8 +126,18 @@ export class EmployeesController {
   }
 
   @Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
-  @Patch(':id')
-  update(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {
+  @UseInterceptors(FileInterceptor("employeePhoto"))
+  @Post(':id')
+  async update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateEmployeeDto: UpdateEmployeeDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (file) {
+      const response = await this.awsService.uploadFile(file);
+      updateEmployeeDto.employeePhoto = response as string;
+    }
+
     return this.employeesService.update(id, updateEmployeeDto);
   }
 
