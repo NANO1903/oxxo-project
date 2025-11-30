@@ -73,8 +73,8 @@ export class AuthController {
       userRoles: ["EMPLOYEE"]
     } as UpdateUserDto
   })
-  @Patch('/:email')
-  updateUser(@Param('email') email: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.authService.updateUser(email, updateUserDto);
+  @Patch('/:id')
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.authService.updateUser(id, updateUserDto);
   }
 }

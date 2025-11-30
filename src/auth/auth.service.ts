@@ -30,13 +30,13 @@ export class AuthService {
     const employeeToUpdate = await this.employeeRepository.preload({
       employeeId: id
     });
-    
+
     if (!employeeToUpdate) throw new NotFoundException();
     employeeToUpdate.user = user;
-    
+
     return this.employeeRepository.save(employeeToUpdate);
   }
-  
+
   async registerManager(id: string, createUserDto: CreateUserDto) {
     const roles = createUserDto.userRoles;
     if (roles.includes("Admin") || roles.includes("Employee")) throw new BadRequestException("Rol Inválido");
@@ -72,9 +72,10 @@ export class AuthService {
     return token;
   }
 
-  async updateUser(userEmail: string, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    if (updateUserDto.userPassword) updateUserDto.userPassword = bcrypt.hashSync(updateUserDto.userPassword, 5);
     const newUserData = await this.userRepository.preload({
-      userEmail,
+      userId: id,
       ...updateUserDto
     });
 
