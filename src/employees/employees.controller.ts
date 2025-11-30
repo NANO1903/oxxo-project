@@ -39,6 +39,7 @@ export class EmployeesController {
       const response = await this.awsService.uploadFile(file);
       createEmployeeDto.employeePhoto = response as string;
     }
+    else createEmployeeDto.employeePhoto = "https://nest-oxxo-proyect.s3.us-east-1.amazonaws.com/profile-def.png";
 
     return this.employeesService.create(createEmployeeDto);
   }
@@ -127,7 +128,7 @@ export class EmployeesController {
 
   @Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
   @UseInterceptors(FileInterceptor("employeePhoto"))
-  @Post(':id')
+  @Patch(':id')
   async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() updateEmployeeDto: UpdateEmployeeDto,
