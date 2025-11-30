@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param, Delete, Res, ParseUUIDPipe, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete, Res, ParseUUIDPipe, BadRequestException, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -37,24 +37,10 @@ export class AuthController {
       userRoles: ["EMPLOYEE"]
     } as CreateUserDto
   })
-  @Post('register/employee/:id')
-  registerEmployee(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @Body() createUserDto: CreateUserDto) {
-    if (createUserDto.userRoles.includes("Admin") || createUserDto.userRoles.includes("Manager")) throw new BadRequestException("Rol Inválido");
-    return this.authService.registerEmployee(id, createUserDto);
-  }
-
-  @ApiResponse({
-    status: 201,
-    example: {
-      userEmail: "user@email.com",
-      userPassword: "userPassword",
-      userRoles: ["EMPLOYEE"]
-    } as CreateUserDto
-  })
-  @Post('register/manager/:id')
-  registerManager(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @Body() createUserDto: CreateUserDto) {
-    if (createUserDto.userRoles.includes("Admin") || createUserDto.userRoles.includes("Employee")) throw new BadRequestException("Rol Inválido");
-    return this.authService.registerManager(id, createUserDto);
+  @Post('register/:id')
+  registerUser(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @Body() createUserDto: CreateUserDto, @Query("role") role: string) {
+    if (role === "manager") return this.authService.registerManager;
+    else if (role === "employee") return this.authService.registerEmployee;
   }
 
   @ApiResponse({
