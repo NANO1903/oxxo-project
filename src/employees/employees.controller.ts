@@ -10,15 +10,14 @@ import { Employee } from './entities/employee.entity';
 import { ApiAuth } from 'src/auth/decorators/api.decorator';
 import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import { Location } from 'src/locations/entities/location.entity';
-import { Manager } from 'src/manager/entities/manager.entity';
-import { Region } from 'src/regions/entities/region.entity';
+import { AwsService } from 'src/aws/aws.service';
 
 @ApiAuth()
 @ApiBearerAuth()
 @ApiTags('Employees')
 @Controller('employees')
 export class EmployeesController {
-  constructor(private readonly employeesService: EmployeesService) { }
+  constructor(private readonly employeesService: EmployeesService, private readonly awsService: AwsService) { }
 
   @Auth(ROLES.MANAGER)
   @ApiBody({ type: CreateEmployeeDto })
@@ -39,11 +38,14 @@ export class EmployeesController {
   }
 
   @Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
-  @Post('upload')
+  @Post(':id/upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadPhoto(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    return "OK";
+  async uploadPhoto(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @UploadedFile() file: Express.Multer.File) {
+    const response = await this.awsService.uploadFile(file);
+    if (!response) return null;
+    return this.employeesService.update(id, {
+      employeePhoto: response
+    })
   }
 
   @Auth(ROLES.MANAGER, ROLES.ADMIN)
@@ -92,31 +94,31 @@ export class EmployeesController {
   findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
     return this.employeesService.findOne(id);
   }
-  
+
   @Auth(ROLES.MANAGER)
   @ApiResponse({
     status: 200,
     example:
-    [
-      {
-        locationId: 1,
-        locationName: "OXXO Centro",
-        locationAddress: "Av. Central 123, Col. Centro, Ciudad de México",
-        locationLatLng: [19.4326, -99.1332]
-      }, 
-      {
-        locationId: 2,
-        locationName: "OXXO Norte",
-        locationAddress: "Av. Norte 456, Col. Norte, Ciudad de México",
-        locationLatLng: [19.4526, -99.1232]
-      } 
-    ] as Location[]
+      [
+        {
+          locationId: 1,
+          locationName: "OXXO Centro",
+          locationAddress: "Av. Central 123, Col. Centro, Ciudad de México",
+          locationLatLng: [19.4326, -99.1332]
+        },
+        {
+          locationId: 2,
+          locationName: "OXXO Norte",
+          locationAddress: "Av. Norte 456, Col. Norte, Ciudad de México",
+          locationLatLng: [19.4526, -99.1232]
+        }
+      ] as Location[]
   })
   @Get('location/:id')
-  findAllLocations(@Param('id') id: string) {   
+  findAllLocations(@Param('id') id: string) {
     return this.employeesService.findByLocation(+id);
   }
-  
+
   @Auth(ROLES.MANAGER, ROLES.EMPLOYEE)
   @Patch(':id')
   update(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @Body() updateEmployeeDto: UpdateEmployeeDto) {

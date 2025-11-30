@@ -7,10 +7,10 @@ import { ManagerModule } from './manager/manager.module';
 import { LocationsModule } from './locations/locations.module';
 import { RegionsModule } from './regions/regions.module';
 import { AuthModule } from './auth/auth.module';
-
+import { AwsModule } from './aws/aws.module';
 @Module({
   imports: [
-    EmployeesModule, ProductsModule, 
+    EmployeesModule, ProductsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.host,
@@ -21,14 +21,15 @@ import { AuthModule } from './auth/auth.module';
       entities: [],
       autoLoadEntities: true,
       synchronize: true,
-    }), 
-    ProvidersModule, 
-    ManagerModule, 
-    LocationsModule, 
-    RegionsModule, 
+    }),
+    ProvidersModule,
+    ManagerModule,
+    LocationsModule,
+    RegionsModule,
     AuthModule,
+    AwsModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
