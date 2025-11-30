@@ -39,8 +39,8 @@ export class AuthController {
   })
   @Post('register/:id')
   registerUser(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string, @Body() createUserDto: CreateUserDto, @Query("role") role: string) {
-    if (role === "manager") return this.authService.registerManager;
-    else if (role === "employee") return this.authService.registerEmployee;
+    if (role === "manager") return this.authService.registerManager(id, createUserDto);
+    else if (role === "employee") return this.authService.registerEmployee(id, createUserDto);
   }
 
   @ApiResponse({
