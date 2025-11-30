@@ -23,7 +23,7 @@ export class AwsService {
         })
 
         const response = await this.s3.send(command);
-        if (response.$metadata.httpStatusCode !== 200) return null;
+        if (await response.$metadata.httpStatusCode !== 200) return null;
         return url;
     }
 }
